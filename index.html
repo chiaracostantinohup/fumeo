@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BLEACH — Cravatta Artigianale · Fumeo Carlo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Syne:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #0D0D0D;
+    --ink: #1A1A1A;
+    --grey1: #F7F7F5;
+    --grey2: #EBEBEB;
+    --grey3: #AAAAAA;
+    --grey4: #666666;
+    --white: #FFFFFF;
+    --accent: #1A1A1A;
+    --red: #C8352A;
+    --gold: #B8976A;
+    --ff-display: 'Cormorant Garamond', Georgia, serif;
+    --ff-body: 'Syne', sans-serif;
+  }
+
+  html { font-size: 16px; scroll-behavior: smooth; }
+  body { background: var(--white); color: var(--ink); font-family: var(--ff-body); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 48px; height: 60px;
+    background: var(--white); border-bottom: 1px solid var(--grey2);
+  }
+  .nav-brand { font-family: var(--ff-body); font-size: 13px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--black); text-decoration: none; }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey4); text-decoration: none; transition: color .2s; }
+  .nav-links a:hover { color: var(--black); }
+  .nav-actions { display: flex; gap: 20px; align-items: center; }
+  .nav-actions a { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey4); text-decoration: none; }
+  .nav-cart { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--black); font-weight: 500; }
+
+  /* ── BREADCRUMB ── */
+  .breadcrumb { padding: 14px 48px; display: flex; gap: 8px; align-items: center; border-bottom: 1px solid var(--grey2); }
+  .breadcrumb span { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey3); }
+  .breadcrumb a { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey3); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--black); }
+  .breadcrumb .sep { color: var(--grey2); }
+
+  /* ── MAIN GRID ── */
+  .pdp-main { display: grid; grid-template-columns: 1fr 480px; min-height: calc(100vh - 61px); }
+
+  /* ── GALLERY ── */
+  .gallery-wrap { position: sticky; top: 60px; height: calc(100vh - 60px); background: var(--grey1); display: flex; flex-direction: column; }
+  .gallery-main { flex: 1; overflow: hidden; position: relative; cursor: zoom-in; }
+  .gallery-main img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94); display: block; }
+  .gallery-main:hover img { transform: scale(1.04); }
+  .gallery-badge {
+    position: absolute; top: 24px; left: 24px;
+    background: var(--black); color: var(--white);
+    font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 6px 12px; font-family: var(--ff-body);
+  }
+  .gallery-thumbs { display: flex; gap: 8px; padding: 12px 16px; background: var(--white); border-top: 1px solid var(--grey2); overflow-x: auto; }
+  .gallery-thumbs::-webkit-scrollbar { display: none; }
+  .thumb {
+    flex-shrink: 0; width: 68px; height: 80px; overflow: hidden; cursor: pointer;
+    border: 1.5px solid transparent; transition: border-color .2s;
+  }
+  .thumb.active { border-color: var(--black); }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+  .thumb:hover img { transform: scale(1.08); }
+  .zoom-hint { position: absolute; bottom: 16px; right: 16px; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey3); background: rgba(255,255,255,0.8); padding: 4px 10px; }
+
+  /* ── PRODUCT INFO ── */
+  .product-info { padding: 0; display: flex; flex-direction: column; border-left: 1px solid var(--grey2); }
+
+  /* ── HEADER ── */
+  .info-header { padding: 40px 40px 0; border-bottom: 1px solid var(--grey2); padding-bottom: 32px; }
+  .product-label { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--grey3); margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+  .product-label::after { content: ''; flex: 1; height: 1px; background: var(--grey2); }
+  .product-name { font-family: var(--ff-display); font-size: 42px; font-weight: 300; line-height: 1.08; color: var(--black); margin-bottom: 4px; letter-spacing: -0.01em; }
+  .product-sub { font-family: var(--ff-display); font-size: 18px; font-weight: 300; font-style: italic; color: var(--grey3); margin-bottom: 20px; }
+  .rating-row { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+  .stars { display: flex; gap: 2px; }
+  .star { color: var(--gold); font-size: 13px; }
+  .rating-count { font-size: 11px; color: var(--grey3); letter-spacing: 0.03em; }
+  .rating-link { font-size: 11px; color: var(--grey4); text-decoration: underline; cursor: pointer; }
+  .price-row { display: flex; align-items: baseline; gap: 14px; }
+  .price-main { font-family: var(--ff-display); font-size: 34px; font-weight: 400; color: var(--black); }
+  .price-note { font-size: 10px; letter-spacing: 0.06em; color: var(--grey3); text-transform: uppercase; }
+
+  /* ── VARIANT ── */
+  .info-section { padding: 24px 40px; border-bottom: 1px solid var(--grey2); }
+  .section-label { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--grey3); margin-bottom: 14px; }
+  .color-swatch { display: flex; gap: 10px; align-items: center; }
+  .swatch { width: 32px; height: 32px; border-radius: 0; cursor: pointer; border: 1.5px solid transparent; transition: border-color .2s; position: relative; }
+  .swatch.active { border-color: var(--black); }
+  .swatch.active::after { content: ''; position: absolute; inset: 2px; border: 1px solid var(--white); }
+  .swatch-label { font-size: 12px; color: var(--grey4); margin-left: 4px; }
+
+  /* ── ATC ── */
+  .info-atc { padding: 24px 40px 20px; border-bottom: 1px solid var(--grey2); }
+  .atc-btn {
+    width: 100%; height: 52px;
+    background: var(--black); color: var(--white);
+    font-family: var(--ff-body); font-size: 11px; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    border: none; cursor: pointer;
+    transition: background .2s, letter-spacing .2s;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+  }
+  .atc-btn:hover { background: var(--ink); letter-spacing: 0.22em; }
+  .wishlist-btn {
+    width: 100%; height: 44px; margin-top: 10px;
+    background: transparent; color: var(--grey4);
+    font-family: var(--ff-body); font-size: 11px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    border: 1px solid var(--grey2); cursor: pointer;
+    transition: border-color .2s, color .2s;
+  }
+  .wishlist-btn:hover { border-color: var(--black); color: var(--black); }
+
+  /* ── TRUST SIGNALS ── */
+  .trust-strip { padding: 18px 40px; border-bottom: 1px solid var(--grey2); display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .trust-item { display: flex; flex-direction: column; gap: 3px; }
+  .trust-icon { font-size: 14px; margin-bottom: 2px; }
+  .trust-label { font-size: 10px; font-weight: 600; letter-spacing: 0.05em; color: var(--ink); text-transform: uppercase; }
+  .trust-sub { font-size: 9px; color: var(--grey3); letter-spacing: 0.03em; line-height: 1.4; }
+
+  /* ── ACCORDION ── */
+  .accordion-item { border-bottom: 1px solid var(--grey2); }
+  .accordion-trigger {
+    width: 100%; padding: 18px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: none; border: none; cursor: pointer;
+    font-family: var(--ff-body); font-size: 11px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink);
+    text-align: left;
+  }
+  .accordion-trigger:hover { background: var(--grey1); }
+  .accordion-icon { font-size: 18px; color: var(--grey3); transition: transform .3s; line-height: 1; font-weight: 300; }
+  .accordion-item.open .accordion-icon { transform: rotate(45deg); }
+  .accordion-body { max-height: 0; overflow: hidden; transition: max-height .4s cubic-bezier(0.4,0,0.2,1); }
+  .accordion-item.open .accordion-body { max-height: 600px; }
+  .accordion-content { padding: 0 40px 24px; }
+
+  /* ── DESCRIPTION ── */
+  .desc-text { font-family: var(--ff-display); font-size: 17px; font-weight: 300; line-height: 1.75; color: var(--grey4); }
+  .desc-text p { margin-bottom: 16px; }
+  .desc-text p:last-child { margin-bottom: 0; }
+  .desc-text strong { font-weight: 500; color: var(--ink); }
+
+  /* ── SPECS ── */
+  .specs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .spec-row { padding: 10px 0; border-bottom: 1px solid var(--grey2); display: flex; flex-direction: column; gap: 3px; }
+  .spec-row:nth-child(odd) { padding-right: 16px; }
+  .spec-key { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey3); }
+  .spec-val { font-size: 13px; color: var(--ink); font-family: var(--ff-display); font-weight: 400; letter-spacing: 0.01em; }
+
+  /* ── HERITAGE ── */
+  .heritage-block { display: flex; gap: 20px; }
+  .heritage-year { font-family: var(--ff-display); font-size: 72px; font-weight: 300; color: var(--grey2); line-height: 1; flex-shrink: 0; margin-top: -8px; }
+  .heritage-text { font-family: var(--ff-display); font-size: 15px; font-weight: 300; line-height: 1.8; color: var(--grey4); }
+  .heritage-text p { margin-bottom: 12px; }
+
+  /* ── CARE ── */
+  .care-list { display: flex; flex-direction: column; gap: 8px; }
+  .care-item { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--grey4); letter-spacing: 0.02em; }
+  .care-icon { font-size: 15px; }
+
+  /* ── PAYMENT ── */
+  .pay-methods { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 10px; }
+  .pay-badge { background: var(--grey1); border: 1px solid var(--grey2); padding: 4px 10px; font-size: 10px; letter-spacing: 0.06em; color: var(--grey4); font-weight: 600; }
+  .pay-note { font-size: 11px; color: var(--grey3); }
+
+  /* ── REVIEWS SECTION ── */
+  .reviews-section { padding: 80px 48px; border-top: 1px solid var(--grey2); background: var(--white); }
+  .section-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 40px; }
+  .section-title { font-family: var(--ff-display); font-size: 36px; font-weight: 300; color: var(--black); }
+  .section-meta { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey3); }
+  .reviews-summary { display: flex; gap: 48px; align-items: center; padding: 32px; background: var(--grey1); margin-bottom: 40px; }
+  .score-big { font-family: var(--ff-display); font-size: 64px; font-weight: 300; color: var(--black); line-height: 1; }
+  .score-stars { display: flex; gap: 4px; margin: 8px 0 4px; }
+  .score-stars .star { font-size: 16px; }
+  .score-count { font-size: 11px; color: var(--grey3); letter-spacing: 0.06em; }
+  .bars { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+  .bar-row { display: flex; align-items: center; gap: 10px; }
+  .bar-label { font-size: 10px; color: var(--grey4); width: 40px; text-align: right; }
+  .bar-track { flex: 1; height: 3px; background: var(--grey2); }
+  .bar-fill { height: 100%; background: var(--black); }
+  .bar-count { font-size: 10px; color: var(--grey3); width: 24px; }
+  .reviews-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: var(--grey2); }
+  .review-card { background: var(--white); padding: 28px 28px 24px; }
+  .review-stars { display: flex; gap: 2px; margin-bottom: 12px; }
+  .review-star { color: var(--gold); font-size: 11px; }
+  .review-text { font-family: var(--ff-display); font-size: 15px; font-weight: 300; font-style: italic; line-height: 1.7; color: var(--grey4); margin-bottom: 16px; }
+  .review-author { display: flex; justify-content: space-between; align-items: center; }
+  .author-name { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink); }
+  .review-date { font-size: 10px; color: var(--grey3); }
+  .review-verified { font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--grey3); margin-top: 3px; }
+
+  /* ── HERITAGE BAND ── */
+  .heritage-band { padding: 64px 48px; background: var(--black); display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+  .heritage-left .year-display { font-family: var(--ff-display); font-size: 120px; font-weight: 300; color: rgba(255,255,255,0.08); line-height: 1; margin-bottom: -20px; }
+  .heritage-left h2 { font-family: var(--ff-display); font-size: 38px; font-weight: 300; color: var(--white); line-height: 1.2; margin-bottom: 20px; }
+  .heritage-left p { font-family: var(--ff-display); font-size: 16px; font-weight: 300; line-height: 1.8; color: rgba(255,255,255,0.55); }
+  .heritage-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(255,255,255,0.08); }
+  .h-stat { padding: 28px 24px; background: var(--black); }
+  .h-stat-n { font-family: var(--ff-display); font-size: 48px; font-weight: 300; color: var(--white); line-height: 1; }
+  .h-stat-l { font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-top: 6px; }
+
+  /* ── CROSS-SELL ── */
+  .crosssell-section { padding: 80px 48px; border-top: 1px solid var(--grey2); }
+  .crosssell-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--grey2); margin-top: 40px; }
+  .cs-card { background: var(--white); cursor: pointer; }
+  .cs-img { aspect-ratio: 3/4; overflow: hidden; background: var(--grey1); }
+  .cs-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94); }
+  .cs-card:hover .cs-img img { transform: scale(1.06); }
+  .cs-info { padding: 14px 16px 18px; }
+  .cs-name { font-family: var(--ff-display); font-size: 16px; font-weight: 300; color: var(--ink); margin-bottom: 3px; }
+  .cs-sub { font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--grey3); margin-bottom: 10px; }
+  .cs-price { font-size: 13px; font-weight: 600; color: var(--black); }
+  .cs-atc { display: block; width: 100%; padding: 9px; border: 1px solid var(--grey2); background: none; font-family: var(--ff-body); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey4); cursor: pointer; margin-top: 8px; transition: all .2s; }
+  .cs-atc:hover { background: var(--black); color: var(--white); border-color: var(--black); }
+
+  /* ── NOTIFICATION ── */
+  .notif {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+    background: var(--black); color: var(--white);
+    padding: 14px 24px; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    opacity: 0; transition: all .35s cubic-bezier(0.34,1.56,0.64,1); z-index: 999; white-space: nowrap;
+  }
+  .notif.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ── FOOTER ── */
+  footer { background: var(--grey1); border-top: 1px solid var(--grey2); padding: 32px 48px; display: flex; align-items: center; justify-content: space-between; }
+  footer p { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey3); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+  .fade-up { opacity: 0; animation: fadeUp 0.6s ease forwards; }
+  .fade-up:nth-child(1) { animation-delay: 0.05s; }
+  .fade-up:nth-child(2) { animation-delay: 0.12s; }
+  .fade-up:nth-child(3) { animation-delay: 0.19s; }
+  .fade-up:nth-child(4) { animation-delay: 0.26s; }
+  .fade-up:nth-child(5) { animation-delay: 0.33s; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="#">Fumeo Carlo</a>
+  <ul class="nav-links">
+    <li><a href="#">Cravatte</a></li>
+    <li><a href="#">Papillon</a></li>
+    <li><a href="#">Accessori</a></li>
+    <li><a href="#">Gift</a></li>
+    <li><a href="#">1932</a></li>
+  </ul>
+  <div class="nav-actions">
+    <a href="#">Account</a>
+    <a class="nav-cart" href="#">Carrello (0)</a>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a href="#">Home</a><span class="sep">·</span>
+  <a href="#">Cravatte</a><span class="sep">·</span>
+  <a href="#">Seta Punto Papillo</a><span class="sep">·</span>
+  <span>BLEACH — Blu Candeggiato</span>
+</div>
+
+<!-- MAIN GRID -->
+<div class="pdp-main">
+
+  <!-- GALLERY -->
+  <div class="gallery-wrap">
+    <div class="gallery-main" id="galleryMain">
+      <img id="mainImg" src="https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=900&q=85" alt="BLEACH Cravatta blu artigianale — Fumeo Carlo">
+      <div class="gallery-badge">100% Seta · Made in Italy</div>
+      <div class="zoom-hint">Passa il cursore per ingrandire</div>
+    </div>
+    <div class="gallery-thumbs">
+      <div class="thumb active" onclick="setImg(0, this)">
+        <img src="https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=200&q=75" alt="Vista frontale">
+      </div>
+      <div class="thumb" onclick="setImg(1, this)">
+        <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=200&q=75" alt="Dettaglio tessuto">
+      </div>
+      <div class="thumb" onclick="setImg(2, this)">
+        <img src="https://images.unsplash.com/photo-1607345366928-199ea26cfe3e?w=200&q=75" alt="Macro punto Papillo">
+      </div>
+      <div class="thumb" onclick="setImg(3, this)">
+        <img src="https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=200&q=75" alt="Indossato">
+      </div>
+      <div class="thumb" onclick="setImg(4, this)">
+        <img src="https://images.unsplash.com/photo-1591085686350-798c0f9faa7f?w=200&q=75" alt="Confezione regalo">
+      </div>
+    </div>
+  </div>
+
+  <!-- PRODUCT INFO -->
+  <div class="product-info">
+
+    <!-- HEADER -->
+    <div class="info-header">
+      <div class="fade-up">
+        <div class="product-label">Cravatta artigianale · Collezione permanente</div>
+        <h1 class="product-name">BLEACH</h1>
+        <div class="product-sub">Cravatta blu a effetto candeggiato</div>
+        <div class="rating-row">
+          <div class="stars">
+            <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+          </div>
+          <span class="rating-count">4.9</span>
+          <a class="rating-link" href="#reviews">27 recensioni</a>
+        </div>
+        <div class="price-row">
+          <span class="price-main">€ 160</span>
+          <span class="price-note">IVA inclusa · Spedizione gratuita</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- COLOR -->
+    <div class="info-section fade-up">
+      <div class="section-label">Colore — <strong style="color:var(--ink)">Blu Candeggiato</strong></div>
+      <div class="color-swatch">
+        <div class="swatch active" style="background:#3A5A8A;" title="Blu Candeggiato"></div>
+        <div class="swatch" style="background:#1A1A3A;" title="Blu Notte"></div>
+        <div class="swatch" style="background:#6B8C6B;" title="Verde Salvia"></div>
+        <div class="swatch" style="background:#8B4040;" title="Bordeaux"></div>
+        <span class="swatch-label">Blu Candeggiato</span>
+      </div>
+    </div>
+
+    <!-- ATC -->
+    <div class="info-atc fade-up">
+      <button class="atc-btn" onclick="addToCart()">
+        <span>Aggiungi al carrello</span>
+      </button>
+      <button class="wishlist-btn">♡ &nbsp; Salva nella wishlist</button>
+    </div>
+
+    <!-- TRUST -->
+    <div class="trust-strip fade-up">
+      <div class="trust-item">
+        <div class="trust-icon">🚚</div>
+        <div class="trust-label">Spedizione gratuita</div>
+        <div class="trust-sub">Consegna in 3–5 giorni lavorativi in Italia</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">↩</div>
+        <div class="trust-label">Reso gratuito</div>
+        <div class="trust-sub">14 giorni per il reso, senza domande</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">🎁</div>
+        <div class="trust-label">Gift box inclusa</div>
+        <div class="trust-sub">Ogni ordine include la confezione regalo Fumeo Carlo</div>
+      </div>
+    </div>
+
+    <!-- DESCRIPTION ACCORDION -->
+    <div class="accordion-item open">
+      <button class="accordion-trigger" onclick="toggleAccordion(this)">
+        <span>Descrizione</span>
+        <span class="accordion-icon">+</span>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-content">
+          <div class="desc-text">
+            <p>La <strong>BLEACH</strong> nasce da un'intuizione: trattare la seta come materia viva, capace di assorbire e riflettere la luce in modo imprevisto. Il processo di candeggiatura selettiva — applicato a mano su ogni singolo metro di tessuto — crea un effetto cromatico che non si ripete mai due volte. Ogni cravatta è, in questo senso, un pezzo unico.</p>
+            <p>Il tessuto è un <strong>punto Papillo in 100% seta</strong>, lavorato su telai storici a Como. La struttura a piccoli diamanti intrecciati conferisce al telo una tridimensionalità sottile, visibile solo alla luce radente — uno di quei dettagli che chi sa riconoscere la qualità non dimentica.</p>
+            <p>La costruzione è a <strong>tre pieghe</strong>, con interlining in lana vergine per garantire il cadere corretto e la ripresa della forma dopo ogni utilizzo. La cucitura è eseguita interamente a mano, con punto a catenella artigianale.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SPECS ACCORDION -->
+    <div class="accordion-item">
+      <button class="accordion-trigger" onclick="toggleAccordion(this)">
+        <span>Specifiche tecniche</span>
+        <span class="accordion-icon">+</span>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-content">
+          <div class="specs-grid">
+            <div class="spec-row">
+              <div class="spec-key">Materiale</div>
+              <div class="spec-val">100% Seta</div>
+            </div>
+            <div class="spec-row">
+              <div class="spec-key">Lavorazione</div>
+              <div class="spec-val">Punto Papillo</div>
+            </div>
+            <div class="spec-row">
+              <div class="spec-key">Costruzione</div>
+              <div class="spec-val">3 pieghe, cucita a mano</div>
+            </div>
+            <div class="spec-row">
+              <div class="spec-key">Lunghezza</div>
+              <div class="spec-val">150 cm</div>
+            </div>
+            <div class="spec-row">
+              <div class="spec-key">Larghezza</div>
+              <div class="spec-val">8 cm (punta)</div>
+            </div>
+            <div class="spec-row">
+              <div class="spec-key">Trattamento</div>
+              <div class="spec-val">Candeggiatura artigianale</div>
+            </div>
+            <div class="spec-row">
+              <div class="spec-key">Origine tessuto</div>
+              <div class="spec-val">Como, Italia</div>
+            </div>
+            <div class="spec-row">
+              <div class="spec-key">Manifattura</div>
+              <div class="spec-val">Piemonte, Italia</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HERITAGE ACCORDION -->
+    <div class="accordion-item">
+      <button class="accordion-trigger" onclick="toggleAccordion(this)">
+        <span>Storia e artigianalità · Dal 1932</span>
+        <span class="accordion-icon">+</span>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-content">
+          <div class="heritage-block">
+            <div class="heritage-year">1932</div>
+            <div class="heritage-text">
+              <p>Fumeo Carlo nasce nel 1932 in Piemonte come laboratorio di cravatte e accessori per uomo. Quasi un secolo dopo, la manifattura è rimasta fedele agli stessi principi: selezione diretta dei tessuti, lavorazione interamente a mano, nessuna delocalizzazione.</p>
+              <p>Ogni cravatta richiede oltre 40 minuti di lavorazione, dal taglio del tessuto alla cucitura del passante. Le mani che la costruiscono conoscono il mestiere da generazioni.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARE ACCORDION -->
+    <div class="accordion-item">
+      <button class="accordion-trigger" onclick="toggleAccordion(this)">
+        <span>Cura del prodotto</span>
+        <span class="accordion-icon">+</span>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-content">
+          <div class="care-list">
+            <div class="care-item"><span class="care-icon">🌀</span> Pulire a secco — non lavare in lavatrice</div>
+            <div class="care-item"><span class="care-icon">♨️</span> Non stirare direttamente — usare panno umido interposto</div>
+            <div class="care-item"><span class="care-icon">🌿</span> Appendere verticalmente dopo l'uso per il recupero della forma</div>
+            <div class="care-item"><span class="care-icon">☀️</span> Evitare esposizione prolungata alla luce diretta</div>
+            <div class="care-item"><span class="care-icon">📦</span> Conservare arrotolata o nell'astuccio originale</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAYMENT ACCORDION -->
+    <div class="accordion-item">
+      <button class="accordion-trigger" onclick="toggleAccordion(this)">
+        <span>Pagamento e sicurezza</span>
+        <span class="accordion-icon">+</span>
+      </button>
+      <div class="accordion-body">
+        <div class="accordion-content">
+          <div class="pay-methods">
+            <span class="pay-badge">Visa</span>
+            <span class="pay-badge">Mastercard</span>
+            <span class="pay-badge">PayPal</span>
+            <span class="pay-badge">Apple Pay</span>
+            <span class="pay-badge">Klarna</span>
+          </div>
+          <div class="pay-note">Transazioni crittografate SSL · Nessun dato di pagamento salvato sul server</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /product-info -->
+</div><!-- /pdp-main -->
+
+<!-- REVIEWS -->
+<section class="reviews-section" id="reviews">
+  <div class="section-header">
+    <h2 class="section-title">Cosa dicono i clienti</h2>
+    <span class="section-meta">27 recensioni verificate · 4.9 / 5</span>
+  </div>
+  <div class="reviews-summary">
+    <div>
+      <div class="score-big">4.9</div>
+      <div class="score-stars">
+        <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+      </div>
+      <div class="score-count">su 27 recensioni</div>
+    </div>
+    <div class="bars">
+      <div class="bar-row">
+        <span class="bar-label">5 ★</span>
+        <div class="bar-track"><div class="bar-fill" style="width:88%"></div></div>
+        <span class="bar-count">24</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">4 ★</span>
+        <div class="bar-track"><div class="bar-fill" style="width:8%"></div></div>
+        <span class="bar-count">2</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">3 ★</span>
+        <div class="bar-track"><div class="bar-fill" style="width:4%"></div></div>
+        <span class="bar-count">1</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">2 ★</span>
+        <div class="bar-track"><div class="bar-fill" style="width:0%"></div></div>
+        <span class="bar-count">0</span>
+      </div>
+      <div class="bar-row">
+        <span class="bar-label">1 ★</span>
+        <div class="bar-track"><div class="bar-fill" style="width:0%"></div></div>
+        <span class="bar-count">0</span>
+      </div>
+    </div>
+  </div>
+  <div class="reviews-grid">
+    <div class="review-card">
+      <div class="review-stars"><span class="review-star">★</span><span class="review-star">★</span><span class="review-star">★</span><span class="review-star">★</span><span class="review-star">★</span></div>
+      <div class="review-text">«L'effetto candeggiato è ancora più bello dal vivo. La seta ha una profondità che le foto non riescono a restituire. Il nodo scivola perfettamente e la cravatta recupera la forma in pochi minuti. Un acquisto di cui sono molto soddisfatto.»</div>
+      <div class="review-author">
+        <div>
+          <div class="author-name">Marco T.</div>
+          <div class="review-verified">✓ Acquisto verificato</div>
+        </div>
+        <span class="review-date">Feb 2026</span>
+      </div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars"><span class="review-star">★</span><span class="review-star">★</span><span class="review-star">★</span><span class="review-star">★</span><span class="review-star">★</span></div>
+      <div class="review-text">«L'ho acquistata come regalo per mio padre. Confezione impeccabile, cravatta straordinaria. Ha subito detto che è la più bella che abbia mai avuto. Dalla manifattura alla cura dei dettagli, si vede che è Made in Italy vero.»</div>
+      <div class="review-author">
+        <div>
+          <div class="author-name">Giulia M.</div>
+          <div class="review-verified">✓ Acquisto verificato</div>
+        </div>
+        <span class="review-date">Gen 2026</span>
+      </div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars"><span class="review-star">★</span><span class="review-star">★</span><span class="review-star">★</span><span class="review-star">★</span><span class="review-star">★</span></div>
+      <div class="review-text">«Cliente Fumeo Carlo da tre anni. Questa è la mia quinta cravatta e la qualità è rimasta identica: tessuto denso, cucitura precisa, colore che non sbiadisce. Il punto Papillo è un'ossessione — impossibile non toccarla continuamente.»</div>
+      <div class="review-author">
+        <div>
+          <div class="author-name">Andrea B.</div>
+          <div class="review-verified">✓ Acquisto verificato</div>
+        </div>
+        <span class="review-date">Dic 2025</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HERITAGE BAND -->
+<section class="heritage-band">
+  <div class="heritage-left">
+    <div class="year-display">1932</div>
+    <h2>Quasi un secolo di cravatte artigianali piemontesi</h2>
+    <p>Fumeo Carlo non è un brand che racconta l'artigianalità — la pratica ogni giorno, nello stesso laboratorio, con gli stessi gesti. Ogni cravatta esce da mani che conoscono la seta come una lingua madre.</p>
+  </div>
+  <div class="heritage-stats">
+    <div class="h-stat">
+      <div class="h-stat-n">92</div>
+      <div class="h-stat-l">anni di manifattura</div>
+    </div>
+    <div class="h-stat">
+      <div class="h-stat-n">40+</div>
+      <div class="h-stat-l">minuti per cravatta</div>
+    </div>
+    <div class="h-stat">
+      <div class="h-stat-n">100%</div>
+      <div class="h-stat-l">seta italiana</div>
+    </div>
+    <div class="h-stat">
+      <div class="h-stat-n">0</div>
+      <div class="h-stat-l">delocalizzazioni</div>
+    </div>
+  </div>
+</section>
+
+<!-- CROSS-SELL -->
+<section class="crosssell-section">
+  <div class="section-header">
+    <h2 class="section-title">Potrebbe interessarti anche</h2>
+    <span class="section-meta">Cravatte e accessori correlati</span>
+  </div>
+  <div class="crosssell-grid">
+    <div class="cs-card">
+      <div class="cs-img">
+        <img src="https://images.unsplash.com/photo-1577280942785-e45a77e3e8ef?w=400&q=80" alt="SKIN — Cravatta nera in pelle">
+      </div>
+      <div class="cs-info">
+        <div class="cs-name">SKIN</div>
+        <div class="cs-sub">Cravatta pelle nera</div>
+        <div class="cs-price">€ 190</div>
+        <button class="cs-atc">Aggiungi al carrello</button>
+      </div>
+    </div>
+    <div class="cs-card">
+      <div class="cs-img">
+        <img src="https://images.unsplash.com/photo-1594938298603-c8148c4b4fb1?w=400&q=80" alt="Fazzoletto da taschino in seta">
+      </div>
+      <div class="cs-info">
+        <div class="cs-name">POCKET</div>
+        <div class="cs-sub">Fazzoletto da taschino · Seta</div>
+        <div class="cs-price">€ 55</div>
+        <button class="cs-atc">Aggiungi al carrello</button>
+      </div>
+    </div>
+    <div class="cs-card">
+      <div class="cs-img">
+        <img src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&q=80" alt="Papillon artigianale">
+      </div>
+      <div class="cs-info">
+        <div class="cs-name">NŒUD</div>
+        <div class="cs-sub">Papillon · Seta grenadine</div>
+        <div class="cs-price">€ 95</div>
+        <button class="cs-atc">Aggiungi al carrello</button>
+      </div>
+    </div>
+    <div class="cs-card">
+      <div class="cs-img">
+        <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&q=80" alt="Gift box Fumeo Carlo">
+      </div>
+      <div class="cs-info">
+        <div class="cs-name">GIFT BOX</div>
+        <div class="cs-sub">Set regalo · 2 cravatte + fazzoletto</div>
+        <div class="cs-price">€ 320</div>
+        <button class="cs-atc">Aggiungi al carrello</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 Fumeo Carlo · Cravatte artigianali dal 1932</p>
+  <p>Prototipo UX — Fumeo Carlo PDP ideale</p>
+</footer>
+
+<!-- NOTIF -->
+<div class="notif" id="notif">Aggiunto al carrello</div>
+
+<script>
+  const imgs = [
+    "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=900&q=85",
+    "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=900&q=85",
+    "https://images.unsplash.com/photo-1607345366928-199ea26cfe3e?w=900&q=85",
+    "https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=900&q=85",
+    "https://images.unsplash.com/photo-1591085686350-798c0f9faa7f?w=900&q=85",
+  ];
+
+  function setImg(idx, el) {
+    document.getElementById('mainImg').src = imgs[idx];
+    document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  function toggleAccordion(btn) {
+    const item = btn.closest('.accordion-item');
+    item.classList.toggle('open');
+  }
+
+  function addToCart() {
+    const n = document.getElementById('notif');
+    n.classList.add('show');
+    setTimeout(() => n.classList.remove('show'), 2200);
+  }
+
+  // Color swatches
+  document.querySelectorAll('.swatch').forEach(sw => {
+    sw.addEventListener('click', function() {
+      document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+      this.classList.add('active');
+      document.querySelector('.swatch-label').textContent = this.title;
+    });
+  });
+
+  // IntersectionObserver for heritage band
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.style.opacity = '1'; });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.h-stat').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transition = 'opacity 0.6s ease';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
